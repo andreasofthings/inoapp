@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme.dart';
+import 'add_method_bottom_sheet.dart';
+import '../models.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   const CustomBottomNavBar({super.key});
@@ -23,77 +25,93 @@ class CustomBottomNavBar extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildNavItem(Icons.category, 'Library', isSelected: true),
-                _buildNavItem(Icons.event_note, 'Workshops'),
+                _buildNavItem(context, Icons.home_outlined, 'Home', isSelected: true),
+                _buildNavItem(context, Icons.event_note_outlined, 'Workshops', onTap: () {
+                  Navigator.pushNamed(context, '/planner', arguments: sampleWorkshop);
+                }),
                 const SizedBox(width: 48), // Spacer for the Add button
-                _buildNavItem(Icons.star_border, 'Favorites'),
-                _buildNavItem(Icons.person_outline, 'Profile'),
+                _buildNavItem(context, Icons.library_books_outlined, 'Library'),
+                _buildNavItem(context, Icons.person_outline, 'Profile'),
               ],
             ),
           ),
           Positioned(
             top: 0,
-            child: _buildAddButton(),
+            child: _buildAddButton(context),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, {bool isSelected = false}) {
+  Widget _buildNavItem(BuildContext context, IconData icon, String label, {bool isSelected = false, VoidCallback? onTap}) {
     return Expanded(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onTap,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              color: isSelected ? AppColors.primary : AppColors.textSlate500,
+              size: 24,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                color: isSelected ? AppColors.primary : AppColors.textSlate500,
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAddButton(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (context) => const AddMethodBottomSheet(),
+        );
+      },
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            color: isSelected ? AppColors.primary : AppColors.textSlate500,
-            size: 24,
+          Container(
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(
+              color: AppColors.primary,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withOpacity(0.3),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: const Icon(Icons.add, color: Colors.white, size: 32),
           ),
           const SizedBox(height: 4),
-          Text(
-            label,
+          const Text(
+            'New',
             style: TextStyle(
-              color: isSelected ? AppColors.primary : AppColors.textSlate500,
+              color: AppColors.textSlate500,
               fontSize: 10,
               fontWeight: FontWeight.bold,
             ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildAddButton() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 56,
-          height: 56,
-          decoration: BoxDecoration(
-            color: AppColors.primary,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.primary.withOpacity(0.3),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: const Icon(Icons.add, color: Colors.white, size: 32),
-        ),
-        const SizedBox(height: 4),
-        const Text(
-          'New',
-          style: TextStyle(
-            color: AppColors.textSlate500,
-            fontSize: 10,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
     );
   }
 }
