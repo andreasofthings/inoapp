@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pod/main.dart';
 
@@ -6,10 +7,13 @@ void main() {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const PodApp());
 
-    // Verify that our app shows the 'Method Toolkit' text.
-    expect(find.text('Method Toolkit'), findsOneWidget);
-    // 'Library' appears in the header and in the bottom navigation bar.
-    expect(find.text('Library'), findsNWidgets(2));
+    // Verify that our app shows the 'Coach\'s Toolkit' text.
+    expect(find.text('Coach\'s Toolkit'), findsOneWidget);
+
+    // 'Library' appears in the bottom navigation bar.
+    expect(find.text('Library'), findsOneWidget);
+
+    // 'Empathy Maps' appears in the Quick Picks.
     expect(find.text('Empathy Maps'), findsOneWidget);
   });
 }
