@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pod/main.dart';
 
 void main() {
   testWidgets('Method Toolkit smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const PodApp());
+    await tester.pumpWidget(const PodApp(isLoggedIn: true));
 
     // Verify that our app shows the 'Coach\'s Toolkit' text.
     expect(find.text('Coach\'s Toolkit'), findsOneWidget);

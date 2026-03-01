@@ -5,13 +5,19 @@ import 'screens/toolkit_home_screen.dart';
 import 'screens/method_details_screen.dart';
 import 'screens/workshop_planner_screen.dart';
 import 'screens/live_mode_screen.dart';
+import 'screens/welcome.dart';
+import 'services/auth_service.dart';
 
-void main() {
-  runApp(const PodApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final authService = AuthService();
+  final isLoggedIn = await authService.isLoggedIn();
+  runApp(PodApp(isLoggedIn: isLoggedIn));
 }
 
 class PodApp extends StatelessWidget {
-  const PodApp({super.key});
+  final bool isLoggedIn;
+  const PodApp({super.key, required this.isLoggedIn});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +30,11 @@ class PodApp extends StatelessWidget {
         fontFamily: 'Inter',
         useMaterial3: true,
       ),
-      home: const ToolkitHomeScreen(),
+      home: isLoggedIn ? const ToolkitHomeScreen() : const WelcomeScreen(),
+      routes: {
+        '/login': (context) => const WelcomeScreen(),
+        '/home': (context) => const ToolkitHomeScreen(),
+      },
       onGenerateRoute: (settings) {
         if (settings.name == '/details') {
           final method = settings.arguments as MethodItem;

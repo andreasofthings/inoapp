@@ -135,7 +135,7 @@ class _WorkshopPlannerScreenState extends State<WorkshopPlannerScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.between,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text("Session Agenda", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
               Container(
